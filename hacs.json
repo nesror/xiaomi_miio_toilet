@@ -1,5 +1,5 @@
 {
-    "name": "Xiaomi MIoT Toilet",
+    "name": "Xiaomi Miio Toilet",
     "content_in_root": false,
     "render_readme": true,
     "iot_class": "local_polling"
