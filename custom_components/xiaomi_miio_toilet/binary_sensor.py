@@ -100,19 +100,16 @@ class XjxToilet(BinarySensorEntity):
     async def async_update(self):
         try:
             seating = self._device.get_properties(properties=['seating'])
-            self._state = seating[0] == 1
-        except Exception:
-            _LOGGER.error('Update seating state error.', exc_info=True)
-        try:
             seatTemp = self._device.get_properties(properties=['seat_temp','status_seatheat'])
             statusLed = self._device.get_properties(properties=['status_led'])
+            self._state = seating[0] == 1
             self._state_attrs.update({
                 "status_seatheat": seatTemp[1] == 1,
                 "seat_temp": seatTemp[0],
                 "status_led": statusLed[0] == 1
             })
         except Exception:
-            _LOGGER.error('Update _status_seatheat error.', exc_info=True)
+            _LOGGER.error('Update state error.', exc_info=True)
 
     @property
     def name(self):
@@ -158,7 +155,6 @@ class XjxToilet(BinarySensorEntity):
     
     async def work_night_led(self,**kwargs):
         try:
-            _LOGGER.error('work_night_led'+self._name, exc_info=True)
             self._device.send('work_night_led', [kwargs["status"]])
         except DeviceException:
             raise PlatformNotReady
