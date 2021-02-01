@@ -19,7 +19,7 @@
 * 将 custom_component 文件夹中的内容拷贝至自己的相应目录
 
 或者
-* 将此 repo ([https://github.com/nesror/xiaomi_miio_toilet](https://github.com/nesror/xiaomi_miio_toilet)) 添加到 [HACS](https://hacs.xyz/)，然后添加“Xiaomi MIoT Toilet”
+* 将此 repo ([https://github.com/nesror/xiaomi_miio_toilet](https://github.com/nesror/xiaomi_miio_toilet)) 添加到 [HACS](https://hacs.xyz/)，然后添加“Xiaomi Miio Toilet”
 
 ## 配置
 ```
