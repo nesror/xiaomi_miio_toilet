@@ -77,10 +77,10 @@ def setup_platform(hass, config, async_add_devices, discovery_info=None):
             if not hasattr(device, method['method']):
                 continue
             await getattr(device, method['method'])(**params)
-            update_tasks.append(device.async_update_ha_state(True))
+            update_tasks.append(asyncio.create_task(device.async_update_ha_state(True)))
 
         if update_tasks:
-            await asyncio.wait(update_tasks, loop=hass.loop)
+            await asyncio.wait(update_tasks)
 
     for service in SERVICE_TO_METHOD:
         schema = SERVICE_TO_METHOD[service].get('schema', SERVICE_SCHEMA)
@@ -93,13 +93,18 @@ class XjxToilet(BinarySensorEntity):
         self._name = name
         self._device = Device(host, token)
         self._state = False
-        self._state_attrs = {}
+        self._state_attrs = {
+            "host": host,
+            "token": token
+        }
         device_info = self._device.info()
         self._unique_id = "{}-{}".format(device_info.model, device_info.mac_address)
-
     async def async_update(self):
         try:
             seating = self._device.get_properties(properties=['seating'])
+            if seating is None or seating[0] in ["unknown", "unavailable"]:
+                self._device = Device(self._state_attrs.host, self._state_attrs.token)
+                return
             seatTemp = self._device.get_properties(properties=['seat_temp','status_seatheat'])
             statusLed = self._device.get_properties(properties=['status_led'])
             self._state = seating[0] == 1
@@ -109,6 +114,7 @@ class XjxToilet(BinarySensorEntity):
                 "status_led": statusLed[0] == 1
             })
         except Exception:
+            self._device = Device(self._state_attrs.host, self._state_attrs.token)
             _LOGGER.error('Update state error.', exc_info=True)
 
     @property
