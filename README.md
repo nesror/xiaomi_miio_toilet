@@ -1,5 +1,8 @@
 # xiaomi_miio_toilet
-小米马桶/马桶圈插件
+小米马桶/马桶圈插件 
+ 
+不再维护，请使用miot插件代替（已完善miot冲水功能，需要等该request合并）  
+https://github.com/al-one/hass-xiaomi-miot/pull/1480
 
 目前此插件已支持以下设备类型：
 * 小鲸洗中支持米家app的马桶/马桶圈
